@@ -1,8 +1,6 @@
 package com.nara.auth_service.jwt;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.crypto.SecretKey;
 
@@ -17,13 +15,13 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtils {
 
-  @Value("${jwt.token.secret}")
-  private String secretKey;
-  SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+   private final SecretKey key;
+
+    public JwtUtils(@Value("${jwt.token.secret}") String secretKey) {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
 
   public String generateToken(UserDetails authUser) {
-
-    Map<String, Object> claims = new HashMap<>();
 
     return Jwts.builder()
         .subject(authUser.getUsername())

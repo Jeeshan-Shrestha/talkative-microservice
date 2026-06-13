@@ -1,6 +1,5 @@
 package com.nara.auth_service.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,7 @@ import com.nara.auth_service.model.AuthObject;
 import com.nara.auth_service.service.AuthenticationService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api-service")
 public class AuthController {
 
   private final AuthenticationService authenticationService;

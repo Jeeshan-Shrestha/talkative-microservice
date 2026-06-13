@@ -4,6 +4,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.nara.auth_service.jwt.JwtUtils;
@@ -16,14 +17,18 @@ public class AuthenticationService {
   private final AuthRepo authRepo;
   private final AuthenticationManager authenticationManager;
   private final JwtUtils jwtUtils;
+  private final BCryptPasswordEncoder encoder;
 
   public AuthenticationService(AuthRepo authRepo,
       AuthenticationManager authenticationManager,
+      BCryptPasswordEncoder encoder,
       JwtUtils jwtUtils) {
     this.authRepo = authRepo;
     this.authenticationManager = authenticationManager;
+    this.encoder = encoder;
     this.jwtUtils = jwtUtils;
   }
+
 
   public void register(AuthObject authObject) {
 
@@ -31,7 +36,8 @@ public class AuthenticationService {
     if (user != null) {
       throw new RuntimeException("User with that name already exists in the database");
     }
-
+    authObject.setRole("ROLE_USER");
+    authObject.setPassword(encoder.encode(authObject.getPassword()));
     authRepo.save(authObject);
 
   }
